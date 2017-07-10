@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dmall.dao.ShippingMapper">
+
+    <sql id="Base_Column_List">
+        id, user_id, receiver_name, receiver_phone, receiver_mobile, receiver_province,
+        receiver_city, receiver_district, receiver_address, receiver_zip, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.dmall.pojo.Shipping" useGeneratedKeys="true" keyProperty="id">
+        insert into dmall_shipping(<include refid="Base_Column_List" />)
+        values (
+        #{id}, #{userId}, #{receiverName}, #{receiverPhone}, #{receiverMobile}, #{receiverProvince},
+        #{receiverCity}, #{receiverDistrict}, #{receiverAddress}, #{receiverZip}, now(), now())
+    </insert>
+
+    <update id="updateByPrimaryKeySelective">
+        update dmall_shipping
+        <set>
+            <if test="receiverName != null">receiver_name = #{receiverName},</if>
+            <if test="receiverPhone != null">receiver_phone = #{receiverPhone},</if>
+            <if test="receiverMobile != null">receiver_mobile = #{receiverMobile},</if>
+            <if test="receiverProvince != null">receiver_province = #{receiverProvince},</if>
+            <if test="receiverCity != null">receiver_city = #{receiverCity},</if>
+            <if test="receiverDistrict != null">receiver_district = #{receiverDistrict},</if>
+            <if test="receiverAddress != null">receiver_address = #{receiverAddress},</if>
+            <if test="receiverZip != null">receiver_zip = #{receiverZip},</if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateByShipping">
+        update dmall_shipping
+        set
+            receiver_name = #{receiverName},
+            receiver_phone = #{receiverPhone},
+            receiver_mobile = #{receiverMobile},
+            receiver_province = #{receiverProvince},
+            receiver_city = #{receiverCity},
+            receiver_district = #{receiverDistrict},
+            receiver_address = #{receiverAddress},
+            receiver_zip = #{receiverZip},
+            update_time = now()
+       where id = #{id}
+       and user_id = #{userId}
+
+    </update>
+
+    <delete id="deleteByUserIdShippingId" parameterType="map">
+        delete from dmall_shipping
+        where id = #{shippingId}
+        and user_id = #{userId}
+  </delete>
+
+    <select id="selectByUserIdShippingId" parameterType="map" resultType="com.dmall.pojo.Shipping">
+        select
+        <include refid="Base_Column_List" />
+        from dmall_shipping
+        where id = #{shippingId}
+        and user_id = #{userId}
+    </select>
+
+    <select id="selectByUserId" resultType="com.dmall.pojo.Shipping">
+        select
+        <include refid="Base_Column_List" />
+        from dmall_shipping
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectByPrimaryKey" resultType="com.dmall.pojo.Shipping">
+        select <include refid="Base_Column_List" />
+        from dmall_shipping
+        where id = #{shippingId}
+    </select>
+</mapper>

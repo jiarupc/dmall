@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.dmall.dao.ProductMapper">
+
+    <sql id="Base_column_List">
+        id, category_id, name, sub_title, main_image, sub_images, detail, price, stock, status,
+        create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.dmall.pojo.Product">
+        insert into dmall_product (
+        <include refid="Base_column_List" />
+        )
+        values(
+        #{id}, #{categoryId}, #{name}, #{subTitle}, #{mainImage}, #{subImages},
+        #{detail}, #{price}, #{stock}, #{status}, now(), now()
+        )
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dmall.pojo.Product">
+        update dmall_product
+        <set>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="subTitle != null">sub_title = #{subTitle},</if>
+            <if test="mainImage != null">main_image = #{mainImage},</if>
+            <if test="subImages != null">sub_images = #{subImages},</if>
+            <if test="detail != null">detail = #{detail},</if>
+            <if test="price != null">price = #{price, jdbcType=DECIMAL},</if>
+            <if test="stock != null">stock = #{stock},</if>
+            <if test="status != null">status = #{status},</if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectByPrimaryKey" resultType="com.dmall.pojo.Product" parameterType="integer">
+        select
+        <include refid="Base_column_List" />
+        from dmall_product
+        where id = #{productId}
+    </select>
+
+    <select id="selectList" resultType="com.dmall.pojo.Product">
+        select
+        <include refid="Base_column_List" />
+        from dmall_product
+        order by id asc
+    </select>
+
+    <select id="selectByNameAndProductId" resultType="com.dmall.pojo.Product" parameterType="map">
+        select
+        <include refid="Base_column_List" />
+        from dmall_product
+        <where>
+            <if test="productName != null">name like #{productName}</if>
+            <if test="productId != null">id like #{productId}</if>
+        </where>
+    </select>
+
+
+    <!--
+    <resultMap id="BaseResultMap" type="com.dmall.pojo.Product">
+        <constructor>
+            <idArg column="id" javaType="integer" jdbcType="INTEGER" />
+            <arg column="category_id" javaType="integer" jdbcType="INTEGER"/>
+            <arg column="name" javaType="string" jdbcType="VARCHAR"/>
+            <arg column="sub_title" javaType="string" jdbcType="VARCHAR"/>
+            <arg column="main_image" javaType="string" jdbcType="VARCHAR"/>
+            <arg column="sub_images" javaType="string" jdbcType="VARCHAR"/>
+            <arg column="detail" javaType="string" jdbcType="VARCHAR"/>
+            <arg column="price" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+            <arg column="stock" javaType="integer" jdbcType="INTEGER"/>
+            <arg column="status" javaType="integer" jdbcType="INTEGER"/>
+            <arg column="create_time" javaType="date" jdbcType="TIMESTAMP"/>
+            <arg column="update_time" javaType="date" jdbcType="TIMESTAMP"/>
+        </constructor>
+    </resultMap>
+    -->
+</mapper>

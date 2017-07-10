@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dmall.dao.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.dmall.pojo.User">
+        <constructor>
+            <idArg column="id" jdbcType="INTEGER" javaType="integer" />
+            <arg column="username" jdbcType="VARCHAR" javaType="string" />
+            <arg column="password" jdbcType="VARCHAR" javaType="string" />
+            <arg column="email" jdbcType="VARCHAR" javaType="string" />
+            <arg column="phone" jdbcType="VARCHAR" javaType="string" />
+            <arg column="question" jdbcType="VARCHAR" javaType="string" />
+            <arg column="answer" jdbcType="VARCHAR" javaType="string" />
+            <arg column="role" jdbcType="INTEGER" javaType="integer" />
+            <arg column="create_time" jdbcType="TIMESTAMP" javaType="date" />
+            <arg column="update_time" jdbcType="TIMESTAMP" javaType="date" />
+        </constructor>
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, username, password, email, phone, question, answer, role, create_time, update_time
+    </sql>
+
+    <select id="checkUsername" resultType="int" parameterType="string">
+        select count(1) from dmall_user
+        where username = #{username}
+    </select>
+
+    <select id="checkEmail" resultType="int" parameterType="string">
+        select count(1) from dmall_user
+        where email = #{email}
+    </select>
+
+    <select id="selectLogin" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List" />
+        from dmall_user
+        where username = #{username}
+        and password = #{password}
+    </select>
+    
+    <insert id="insert">
+        insert into dmall_user(
+        <include refid="Base_Column_List" />
+        )
+        values (#{id}, #{username}, #{password}, #{email}, #{phone}, #{question},#{answer}, #{role},
+         now(), now())
+    </insert>
+    
+    <select id="selectQuestionByUsername" resultType="string" parameterType="string">
+        select
+        question
+        from dmall_user
+        where username = #{username}
+    </select>
+    
+    <select id="checkAnswer" resultType="int" parameterType="map">
+        select
+        count(1)
+        from dmall_user
+        where username = #{username}
+        and question = #{question}
+        and answer = #{answer}
+    </select>
+
+    <update id="updatePasswordByUsername">
+        update dmall_user
+        set password = #{password}, update_time = now()
+        where username = #{username}
+    </update>
+
+    <select id="checkPassword" resultType="int" parameterType="map">
+        select
+        count(1)
+        from dmall_user
+        where password = #{password}
+        and id = #{userId}
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.dmall.pojo.User">
+        update dmall_user
+        <set>
+            <if test="username != null">username = #{username},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="question != null">question = #{question},</if>
+            <if test="answer != null">answer = #{answer},</if>
+            <if test="role != null">role = #{role},</if>
+            update_time = now()
+        </set>
+        where id =#{id, jdbcType=INTEGER}
+    </update>
+
+    <select id="checkEmailByUserId" resultType="java.lang.Integer">
+        select
+        count(1)
+        from dmall_user
+        where email = #{email}
+        and id != #{userId}
+    </select>
+
+    <select id="selectByPrimaryKey" resultType="com.dmall.pojo.User">
+        select
+        <include refid="Base_Column_List" />
+        from dmall_user
+        where id = #{userId, jdbcType=INTEGER}
+    </select>
+
+</mapper>

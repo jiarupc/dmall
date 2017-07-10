@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dmall.dao.PayInfoMapper">
+
+    <sql id="Base_Column_List">
+        id, user_id, order_no, pay_platform, platform_number, platform_status,
+        create_time, update_time
+    </sql>
+
+    <insert id="insert">
+        insert into dmall_pay_info (
+        <include refid="Base_Column_List" />)
+        values (#{id}, #{userId}, #{orderNo},
+        #{payPlatform}, #{platformNumber}, #{platformStatus}, now(), now())
+    </insert>
+</mapper>

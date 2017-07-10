@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dmall.dao.OrderMapper">
+
+    <sql id="Base_Column_List">
+        id, order_no, user_id, shipping_id, payment, payment_type, postage, status,
+        payment_time, send_time, end_time, close_time, create_time, update_time
+    </sql>
+
+    <insert id="insert">
+        insert into dmall_order (
+        <include refid="Base_Column_List" />
+        )
+        values (
+        #{id}, #{orderNo}, #{userId}, #{shippingId}, #{payment}, #{paymentType}, #{postage}, #{status},
+        #{paymentTime}, #{sendTime}, #{endTime}, #{closeTime}, now(), now()
+        )
+    </insert>
+
+    <update id="updateByPrimaryKeySelective">
+        update dmall_order
+        <set>
+            <if test="orderNo != null">order_no = #{orderNo},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="shippingId != null">shipping_id = #{shippingId},</if>
+            <if test="payment != null">payment = #{payment},</if>
+            <if test="paymentType != null">payment_type = #{paymentType},</if>
+            <if test="postage != null">postage = #{postage},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="paymentTime != null">payment_time = #{paymentTime},</if>
+            <if test="sendTime != null">send_time = #{sendTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="closeTime != null">close_time = #{closeTime},</if>
+            update_time = now()
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectByUserIdAndOrderNo" resultType="com.dmall.pojo.Order">
+        select <include refid="Base_Column_List" />
+        from dmall_order
+        where user_id = #{userId}
+        and order_no = #{orderNo}
+   </select>
+
+    <select id="selectByOrderNo" resultType="com.dmall.pojo.Order">
+        select <include refid="Base_Column_List" />
+        from dmall_order
+        where order_no = #{orderNo}
+    </select>
+
+    <select id="selectByUserId" resultType="com.dmall.pojo.Order">
+        select <include refid="Base_Column_List" />
+        from dmall_order
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectAllOrder" resultType="com.dmall.pojo.Order">
+        select <include refid="Base_Column_List" />
+        from dmall_order
+        order by create_time desc
+    </select>
+</mapper>

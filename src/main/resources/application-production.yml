@@ -1,0 +1,6 @@
+server:
+  port: 8080
+#mybatis:
+#  type-aliases-package: com.dmall.pojo
+#  config-locations: classpath:mybatis/*.xml
+#  mappers-locations: classpath:mybatis/mappers/*.xml
