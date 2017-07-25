@@ -14,8 +14,7 @@ mybatis:
 
 logging:
   file: dmall.log
-  path: E:\
-  level:
-    com:
-      dmall: error
+#  level:
+#    com:
+#      dmall: error
 
